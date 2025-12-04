@@ -13,25 +13,31 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.18.0
+          node-version: 20.19.0
 
       - name: Install Dependencies
         run: npm ci --legacy-peer-deps --force
 
-      - name: Download FFmpeg
-        run: |
-          curl -L -o ffmpeg.zip https://github.com/GyanD/codexffmpeg/releases/download/7.1.1/ffmpeg-7.1.1-full_build-shared.zip
-          mkdir -p resources
-          unzip -j ffmpeg.zip */bin/ffmpeg.exe -d resources/
+      # - name: Download FFmpeg
+      #   run: |
+      #     curl -L -o ffmpeg.zip https://github.com/GyanD/codexffmpeg/releases/download/7.1.1/ffmpeg-7.1.1-full_build-shared.zip
+      #     mkdir -p resources
+      #     unzip -j ffmpeg.zip */bin/ffmpeg.exe -d resources/
 
-      - name: Build Source Code
-        run: npm run build  # Ensure this step generates main.js
-
-      - name: Build Windows Executable
-        run: npx electron-builder build --win --x64 --publish never  
+      - name: Build Source
+        run: npm run --foreground-scripts electron -- --win
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Video-Hub-App-Windows
           path: ./release/*.exe
+
+      - name: upload debug artifact 
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: debug-artifact-whole-workspace
+          path: .
+          if-no-files-found: ignore
+          retention-days: 1

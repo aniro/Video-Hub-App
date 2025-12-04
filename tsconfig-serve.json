@@ -6,7 +6,10 @@
       "es2023",
       "dom"
     ],
+    "module": "commonjs",
     "moduleResolution": "node",
+    "outDir": ".",
+    "rootDir": ".",
     "sourceMap": true,
     "target": "es5",
     "typeRoots": [
